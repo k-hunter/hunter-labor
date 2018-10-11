@@ -1,0 +1,27 @@
+Description: fix DoS via long pascal strings
+Origin: backport, https://github.com/file/file/commit/59e63838913eee47f5c120a6c53d4565af638158
+
+Index: file-5.14/src/softmagic.c
+===================================================================
+--- file-5.14.orig/src/softmagic.c	2015-01-27 09:17:46.041121189 -0500
++++ file-5.14/src/softmagic.c	2015-01-27 09:17:46.041121189 -0500
+@@ -901,14 +901,17 @@
+ 		size_t sz = file_pstring_length_size(m);
+ 		char *ptr1 = p->s, *ptr2 = ptr1 + sz;
+ 		size_t len = file_pstring_get_length(m, ptr1);
+-		if (len >= sizeof(p->s)) {
++		sz = sizeof(p->s) - sz; /* maximum length of string */
++		if (len >= sz) {
+ 			/*
+ 			 * The size of the pascal string length (sz)
+ 			 * is 1, 2, or 4. We need at least 1 byte for NUL
+ 			 * termination, but we've already truncated the
+ 			 * string by p->s, so we need to deduct sz.
++			 * Because we can use one of the bytes of the length
++			 * after we shifted as NUL termination.
+ 			 */ 
+-			len = sizeof(p->s) - sz;
++			len = sz;
+ 		}
+ 		while (len--)
+ 			*ptr1++ = *ptr2++;

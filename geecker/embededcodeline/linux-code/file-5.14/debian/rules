@@ -1,0 +1,90 @@
+#!/usr/bin/make -f
+
+SHELL := sh -e
+
+-include /usr/share/python/python.mk
+
+DEB_HOST_GNU_TYPE	?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+DEB_BUILD_GNU_TYPE	?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
+DEB_HOST_MULTIARCH	?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
+
+ifneq ($(DEB_HOST_GNU_TYPE),$(DEB_BUILD_GNU_TYPE))
+	CROSS= --build=$(DEB_BUILD_GNU_TYPE) --host=$(DEB_HOST_GNU_TYPE) CC=$(DEB_HOST_GNU_TYPE)-gcc LD=$(DEB_HOST_GNU_TYPE)-ld
+	SET_CROSS_ENV = PYTHONPATH=/usr/lib/python$$pv/plat-$(DEB_HOST_MULTIARCH)
+	SET_CROSS_ENV += _PYTHON_HOST_PLATFORM=$(DEB_HOST_GNU_CPU)
+else
+	CROSS= --build=$(DEB_BUILD_GNU_TYPE)
+endif
+
+# HOWMANY is the number of bytes looked at by file
+CFLAGS += -DHOWMANY=0x18000
+
+PYTHON_VERSIONS=$(shell pyversions -r debian/control)
+PYTHON3_VERSIONS=$(shell py3versions -r debian/control)
+
+%:
+	dh ${@} --with autoreconf,python2,python3
+
+override_dh_auto_clean:
+	dh_auto_clean
+
+	rm -rf python/build
+	rm -rf python/__pycache__
+	rm -f python/*.pyc
+
+override_dh_auto_build:
+	dh_auto_build
+
+	for python in $(PYTHON_VERSIONS); \
+	do \
+		(cd python && $(SET_CROSS_ENV) $$python setup.py build_ext \
+			-L$(CURDIR)/src/.libs); \
+	done
+
+	for python in $(PYTHON3_VERSIONS); \
+	do \
+		(cd python && $(SET_CROSS_ENV) $$python setup.py build_ext \
+			-L$(CURDIR)/src/.libs); \
+	done
+
+override_dh_auto_configure:
+	dh_auto_configure -- $(CROSS) --prefix=/usr --datadir=\$${prefix}/share --libdir=\$${prefix}/lib/$(DEB_HOST_MULTIARCH) --mandir=\$${prefix}/share/man --enable-fsect-man5 --enable-static --disable-silent-rules CFLAGS="$(CFLAGS)"
+
+override_dh_auto_install:
+	dh_auto_install
+
+	mv debian/tmp/usr/share/misc debian/tmp/usr/share/file
+
+	install -D -m 0644 magic/magic.local debian/tmp/etc/magic
+	install -D -m 0644 magic/magic.local debian/tmp/etc/magic.mime
+
+	for python in $(PYTHON_VERSIONS); \
+	do \
+		(cd python && $(SET_CROSS_ENV) $$python setup.py install --no-compile \
+			--root=$(CURDIR)/debian/python-magic $(py_setup_install_args)); \
+	done
+
+	for python in $(PYTHON3_VERSIONS); \
+	do \
+		(cd python && $(SET_CROSS_ENV) $$python setup.py install --no-compile \
+			--root=$(CURDIR)/debian/python3-magic $(py_setup_install_args)); \
+	done
+
+	# Installing additional headers
+	mkdir -p debian/libmagic-dev/usr/include/file
+	cp src/file.h debian/libmagic-dev/usr/include/file
+
+	# Removing useless files
+	rm -f debian/tmp/usr/lib/*/*.la
+
+override_dh_builddeb:
+	dh_builddeb -- -Zxz
+
+override_dh_install:
+	dh_install --fail-missing
+
+override_dh_shlibdeps:
+	dh_shlibdeps -Llibmagic1 -ldebian/libmagic1/usr/lib
+
+override_dh_strip:
+	dh_strip --dbg-package=file-dbg

@@ -1,0 +1,28 @@
+ 我只列出我觉得有意思的几个参数:
+
+        -T输出函数调用树状图
+
+        -m指定需要分析的函数名
+
+        -n输出函数所在行号
+
+        -r输出调用的反向关系图
+
+        --cpp预处理，这个还是很重要的
+文本输出
+
+        最简单的使用方法是以ASCII文本的方式输出结果，比如
+
+cflow -T -m main -n timer.c
+
+
+具体的转换方法是
+
+    cflow -T -m main -n timer.c > main.txt
+    cat main.txt | tree2dotx > main.dot
+
+dot文件生成图片        
+
+        我们需要借助graphviz（没有安装的可以使用apt-get install graphviz先安装）生成图片，指令是
+
+dot -Tgif main.dot -o main.gif  

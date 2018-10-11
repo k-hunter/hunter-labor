@@ -1,0 +1,16 @@
+Author: Michael Piefel <piefel@debian.org>
+Description: n/a
+
+Index: file-5.14/src/Makefile.in
+===================================================================
+--- file-5.14.orig/src/Makefile.in	2013-05-06 17:49:52.000000000 +0000
++++ file-5.14/src/Makefile.in	2013-05-06 17:49:52.000000000 +0000
+@@ -418,7 +418,7 @@
+ 	rm -f $$list
+ file$(EXEEXT): $(file_OBJECTS) $(file_DEPENDENCIES) $(EXTRA_file_DEPENDENCIES) 
+ 	@rm -f file$(EXEEXT)
+-	$(AM_V_CCLD)$(LINK) $(file_OBJECTS) $(file_LDADD) $(LIBS)
++	$(AM_V_CCLD)$(LINK) $(file_OBJECTS) $(file_LDADD)
+ 
+ mostlyclean-compile:
+ 	-rm -f *.$(OBJEXT)

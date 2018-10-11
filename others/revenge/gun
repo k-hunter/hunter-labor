@@ -1,0 +1,31 @@
+#!/bin/sh
+echo "命令行参数数量：$#"
+echo "指令：$0"
+echo "参数：$１,\n $2,\n $3,\n $4, \n "
+
+
+
+
+main(int argc,char *argv[])
+{
+    printf("参数个数为：%d",argc);
+    for（int i = 0; i < argc; i++)
+    {
+        printf("参数arg[%d] = %s “，argv[i]);
+    }
+    return 0;
+}
+
+thats a damn experent fuuuuuuuuuuuuuuuuuuuuuu!!!!!!!!!!!!!
+nerver do this again
+how to hack him .
+zejiang
+duqiu
+ipone 7 plus
+linux 系统程序设计
+中国移动
+微信mon 2297.19
+打印店新开，好像？？？
+名字，离人愁
+997934938
+

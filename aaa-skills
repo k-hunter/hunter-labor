@@ -1,0 +1,5 @@
+
+mv !(test|lazy-shell|shell_labor) test/
+
+find .  -name ".git" | xargs rm -rf
+find .  -name ".gitignore" | xargs rm -rf

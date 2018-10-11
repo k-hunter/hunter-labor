@@ -1,0 +1,12 @@
+Index: b/magic/Magdir/python
+===================================================================
+--- a/magic/Magdir/python
++++ b/magic/Magdir/python
+@@ -23,6 +23,7 @@
+ 0	belong		0x4f0c0d0a	python 3.1 byte-compiled
+ 0	belong		0x6c0c0d0a	python 3.2 byte-compiled
+ 0	belong		0x9e0c0d0a	python 3.3 byte-compiled
++0	belong		0xe40c0d0a	python 3.4 byte-compiled
+ 
+ 0	search/1/w	#!\ /usr/bin/python	Python script text executable
+ !:mime text/x-python

@@ -1,0 +1,42 @@
+#!/bin/sh
+echo "命令行参数数量：$#"
+echo "指令：$0"
+echo "参数：$１,\n $2,\n $3,\n $4, \n "
+
+
+
+
+main(int argc,char *argv[])
+{
+    printf("参数个数为：%d",argc);
+    for（int i = 0; i < argc; i++)
+    {
+        printf("参数arg[%d] = %s “，argv[i]);
+    }
+    return 0;
+}
+
+
+ahck 周围几个ren 
+先黑出各种账号？非接触黑。
+
+
+
+号码开头，浙江？？158
+c语言重修，说明至少大二？大三？
+不在学校？说明去做其他事了？去哪了，住外面？
+会用冰点下载，windows 系统
+
+thats a damn experinet fuuuuuuuuuuuuuuuuuuuuuu!!!!!!!!!!!!!
+nerver do this again
+how to hack him .
+zejiang
+duqiu
+ipone 7 plus
+linux 系统程序设计
+中国移动 158
+微信mon 2297.19
+打印店新开，好像？？？
+名字，离人愁
+997934938
+

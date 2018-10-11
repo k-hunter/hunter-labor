@@ -1,0 +1,16 @@
+Author: Esa Hyytiä <esa@netlab.tkk.fi>
+Description: Adding new magics for Commodore raw tape files (Closes: #699777).
+
+diff -Naurp file.orig/magic/Magdir/c64 file/magic/Magdir/c64
+--- file.orig/magic/Magdir/c64
++++ file/magic/Magdir/c64
+@@ -41,3 +41,9 @@
+ >32	leshort		x		Version:0x%x
+ >36	leshort		!0		Entries:%i
+ >40	string		x		Name:%.24s
++
++# Raw tape file format (.tap files)
++# Esa Hyytiä <esa@netlab.tkk.fi>
++0	string		C64-TAPE-RAW	C64 Raw Tape File (.tap),
++>0x0c	byte		x		Version:%u,
++>0x10   lelong		x		Length:%lu cycles

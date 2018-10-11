@@ -1,0 +1,13 @@
+Author: Bastien Roucaries <roucaries.bastien@gmail.com>
+Description: Adding updated magics for AOL ART images (Closes: #681304).
+
+diff -Naurp file.orig/magic/Magdir/netscape file/magic/Magdir/netscape
+--- file.orig/magic/Magdir/netscape
++++ file/magic/Magdir/netscape
+@@ -22,4 +22,5 @@
+ 
+ #
+ #This is files ending in .art, FIXME add more rules
+-0       string          JG\004\016\0\0\0\0      ART
++0	string	JG\004\016\0\0\0\0	AOL ART image
++0	string	JG\003\016\0\0\0\0	AOL ART image

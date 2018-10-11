@@ -1,0 +1,5 @@
+sed -n 4,8p file #打印file中的4-8行
+sed -n 4p file #打印file中的第4行
+
+
+

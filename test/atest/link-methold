@@ -1,0 +1,3 @@
+ln -s eixtfile newname
+
+ln existfilename newname //this would better than -s

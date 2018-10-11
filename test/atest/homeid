@@ -1,0 +1,3 @@
+extundelete --inode 786433 /dev/sda9
+extundelete --inode 786434 /dev/sda9
+extundelete --inode 790043 /dev/sda9

@@ -1,0 +1,68 @@
+Authors:
+ Michael Piefel <piefel@debian.org>,
+ Judit Foglszinger <fgrfgr@freenet.de>
+Description:
+ No longer includes Localstuff in /usr/share/misc/magic, local definitions
+ should go to /etc/magic.
+
+Index: file-5.14/magic/Header
+===================================================================
+--- file-5.14.orig/magic/Header	2010-12-15 03:06:49.000000000 +0000
++++ file-5.14/magic/Header	2013-05-06 17:41:20.000000000 +0000
+@@ -1,5 +1,6 @@
+ # Magic data for file(1) command.
+-# Format is described in magic(files), where:
+-# files is 5 on V7 and BSD, 4 on SV, and ?? on SVID.
++# Format is described in in magic(5).
+ # Don't edit this file, edit /etc/magic or send your magic improvements
+-# to the maintainers, at file@mx.gw.com
++# to the upstream maintainers, at file@mx.gw.com
++# or send your suggested inclusions
++# as a wishlist bug against file (using the reportbug utility).
+Index: file-5.14/magic/magic.local
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ file-5.14/magic/magic.local	2013-05-06 17:41:20.000000000 +0000
+@@ -0,0 +1,3 @@
++# Magic local data for file(1) command.
++# Insert here your local magic data. Format is described in magic(5).
++
+Index: file-5.14/src/apprentice.c
+===================================================================
+--- file-5.14.orig/src/apprentice.c	2013-03-21 17:45:14.000000000 +0000
++++ file-5.14/src/apprentice.c	2013-05-06 17:41:20.000000000 +0000
+@@ -419,7 +419,7 @@
+ #ifndef COMPILE_ONLY
+ 	map = apprentice_map(ms, fn);
+ 	if (map == NULL) {
+-		if (ms->flags & MAGIC_CHECK)
++		if (ms->flags & MAGIC_CHECK && strcmp("/etc/magic", fn) != 0)
+ 			file_magwarn(ms, "using regular magic file `%s'", fn);
+ 		map = apprentice_load(ms, fn, action);
+ 		if (map == NULL)
+Index: file-5.14/src/Makefile.am
+===================================================================
+--- file-5.14.orig/src/Makefile.am	2013-03-21 17:45:14.000000000 +0000
++++ file-5.14/src/Makefile.am	2013-05-06 17:41:20.000000000 +0000
+@@ -4,7 +4,7 @@
+ 
+ bin_PROGRAMS = file
+ 
+-AM_CPPFLAGS = -DMAGIC='"$(MAGIC)"'
++AM_CPPFLAGS = -DMAGIC='"/etc/magic:$(MAGIC)"'
+ AM_CFLAGS = $(CFLAG_VISIBILITY) @WARNINGS@
+ 
+ libmagic_la_SOURCES = magic.c apprentice.c softmagic.c ascmagic.c \
+Index: file-5.14/src/Makefile.in
+===================================================================
+--- file-5.14.orig/src/Makefile.in	2013-03-21 17:51:39.000000000 +0000
++++ file-5.14/src/Makefile.in	2013-05-06 17:41:20.000000000 +0000
+@@ -282,7 +282,7 @@
+ MAGIC = $(pkgdatadir)/magic
+ lib_LTLIBRARIES = libmagic.la
+ include_HEADERS = magic.h
+-AM_CPPFLAGS = -DMAGIC='"$(MAGIC)"'
++AM_CPPFLAGS = -DMAGIC='"/etc/magic:$(MAGIC)"'
+ AM_CFLAGS = $(CFLAG_VISIBILITY) @WARNINGS@
+ libmagic_la_SOURCES = magic.c apprentice.c softmagic.c ascmagic.c \
+ 	encoding.c compress.c is_tar.c readelf.c print.c fsmagic.c \
